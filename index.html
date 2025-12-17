@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Interactiva - Plantilla</title>
+    <style>
+        /* --- ESTILOS (DISEÑO) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9; /* Fondo gris muy clarito */
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cabecera */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-area {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        h1 { margin: 0; color: #5D4037; }
+        p { color: #777; }
+
+        /* Controles (Buscador y Botones) */
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #search-input {
+            width: 90%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        #search-input:focus { border-color: #FFEB3B; }
+
+        .filter-btn {
+            background: #eee;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #FFEB3B; /* Color activo */
+            color: #5D4037;
+        }
+
+        /* Grilla de Productos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 columnas */
+            gap: 15px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover { transform: translateY(-5px); }
+
+        .product-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #ddd; /* Color mientras carga imagen */
+            margin-bottom: 10px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .product-price {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-buy {
+            display: block;
+            width: 100%;
+            background-color: #25D366; /* Verde WhatsApp */
+            color: white;
+            text-decoration: none;
+            padding: 8px 0;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-area">📦</div> <h1>Mi Tienda Nivel 2</h1>
+            <p>Buscador y filtros integrados</p>
+        </header>
+
+        <div class="controls">
+            <input type="text" id="search-input" placeholder="🔍 Buscar producto...">
+            
+            <div id="filter-buttons">
+                <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
+                <button class="filter-btn" onclick="filterProducts('categoria1')">Gorros</button>
+                <button class="filter-btn" onclick="filterProducts('categoria2')">Llaveros</button>
+            </div>
+        </div>
+
+        <div id="product-container" class="products-grid">
+            </div>
+    </div>
+
+    <script>
+        // 1. CONFIGURACIÓN: TU NÚMERO DE WHATSAPP
+        const telefonoWhatsApp = "549351XXXXXXX"; // <--- ¡PON TU NÚMERO AQUÍ!
+
+        // 2. TUS PRODUCTOS (AQUÍ ES DONDE EDITAS)
+        // Puedes copiar y pegar estas líneas para agregar más
+        const productos = [
+            {
+                id: 1,
+                nombre: "Producto A",
+                categoria: "categoria1",
+                precio: 5000,
+                imagen: "https://via.placeholder.com/150" // Enlace a la foto
+            },
+            {
+                id: 2,
+                nombre: "Producto B",
+                categoria: "categoria2",
+                precio: 3500,
+                imagen: "https://via.placeholder.com/150"
+            },
+            {
+                id: 3,
+                nombre: "Producto C",
+                categoria: "categoria1",
+                precio: 6000,
+                imagen: "https://via.placeholder.com/150"
+            },
+            {
+                id: 4,
+                nombre: "Producto D",
+                categoria: "categoria2",
+                precio: 4200,
+                imagen: "https://via.placeholder.com/150"
+            }
+        ];
+
+        // 3. FUNCIÓN QUE DIBUJA LOS PRODUCTOS EN PANTALLA
+        function renderProducts(lista) {
+            const container = document.getElementById('product-container');
+            container.innerHTML = ''; // Limpiar pantalla
+
+            lista.forEach(producto => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${producto.imagen}" class="product-img" alt="${producto.nombre}">
+                    <div class="product-title">${producto.nombre}</div>
+                    <div class="product-price">$${producto.precio}</div>
+                    <a href="https://wa.me/${telefonoWhatsApp}?text=Hola! Me interesa el ${producto.nombre}" 
+                       class="btn-buy" target="_blank">Pedir 💬</a>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 4. FUNCIÓN PARA FILTRAR POR CATEGORÍA
+        function filterProducts(categoria) {
+            if (categoria === 'all') {
+                renderProducts(productos);
+            } else {
+                const filtrados = productos.filter(p => p.categoria === categoria);
+                renderProducts(filtrados);
+            }
+        }
+
+        // 5. FUNCIÓN PARA BUSCADOR
+        document.getElementById('search-input').addEventListener('keyup', (e) => {
+            const texto = e.target.value.toLowerCase();
+            const filtrados = productos.filter(p => p.nombre.toLowerCase().includes(texto));
+            renderProducts(filtrados);
+        });
+
+        // INICIAR: Mostrar todos al cargar la página
+        renderProducts(productos);
+
+    </script>
+</body>
+</html>
